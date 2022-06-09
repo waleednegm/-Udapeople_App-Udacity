@@ -336,6 +336,8 @@ jobs:
           name: Deploy backend Setup EC2 instance & copy compiled backend to the EC2 instance
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
+            cd ~/project/backend
+            ansible-galaxy install weareinteractive.environment
             ansible-playbook \
               -i .circleci/ansible/inventory.txt \
               .circleci/ansible/deploy-backend.yml
