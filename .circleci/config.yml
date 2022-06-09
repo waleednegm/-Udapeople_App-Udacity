@@ -161,7 +161,7 @@ jobs:
       # Here's where you will add some code to rollback on failure      
   configure-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/base:stable
     steps:
       - checkout
       - run:
