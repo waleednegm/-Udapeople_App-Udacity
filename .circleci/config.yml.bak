@@ -336,17 +336,9 @@ jobs:
           name: Deploy backend Setup EC2 instance & copy compiled backend to the EC2 instance
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
-            cd ../
-            cd backend
-            npm i
-            npm run build
-            cd ..
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            cd ~/project/backend
+            ansible-galaxy install weareinteractive.environment
+            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
