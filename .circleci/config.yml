@@ -283,7 +283,7 @@ jobs:
           name: Install Nodejs
           command: |
             curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-            sudo apt install -y nodejs# Checkout code from git
+            sudo apt install -y nodejs
       - add_ssh_keys:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
