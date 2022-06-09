@@ -50,7 +50,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   build-backend:
     docker:
       - image: cimg/node:13.8.0
