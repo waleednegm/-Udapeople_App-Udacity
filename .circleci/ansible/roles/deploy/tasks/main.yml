@@ -1,5 +1,3 @@
----
-
 - name: Copy backend files
   become: true
   copy:
