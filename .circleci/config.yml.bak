@@ -317,30 +317,15 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      - install_awscli
+      - install_ansible
+      - install_nodejs
       - add_ssh_keys:
-          fingerprints: ["29:46:04:9c:65:1e:1c:d1:0e:8a:65:0a:c1:7c:f1:11"]
+          fingerprints: ["d9:06:93:7c:dd:ac:25:bf:3d:f3:10:f5:5d:69:f6:67"]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - run:
-          name: Install Nodejs
-          command: |
-            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-            sudo apt install -y nodejs
-      - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible
+      - restore_cache:
+          keys: [backend-deps]
       - run:
           name: Install dependencies
           command: |
@@ -363,9 +348,8 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
-      - revert-migrations 
+      - destroy-environment
+      - revert-migrations
 
   smoke-test:
     docker:
