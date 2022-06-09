@@ -315,6 +315,10 @@ jobs:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
           at: ~/
+      - run:
+          name: Add tStrictHostKeyChecking
+          command: |
+            mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: 
           name: Install dependencies
           command: |
