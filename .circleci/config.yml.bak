@@ -272,32 +272,26 @@ deploy-backend:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
           at: ~/
-      - run: 
+      - run:
           name: Install dependencies
+          working_directory: /tmp
           command: |
-            apk add --update curl nodejs npm
-            apk add --update ansible zip
-            apk add --update openssh-client tar gzip
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
             pip install awscli
+            aws --version
       - run:
-          name: Build backend app
+          name: Deploy backend
+          working_directory: ./.circleci/ansible
           command: |
-            cd ~/project/backend
-            ls
-            cd ../
-            cd backend/ && tar -zcvf ../backend.tar.gz . && cd - 
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
-            mv backend.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
-      - run:
-          name: Deploy backend Setup EC2 instance & copy compiled backend to the EC2 instance
-          command: |
-            # ls ~/project/.circleci/ansible/roles/deploy/files/
-            cd ~/project/backend
-            ansible-galaxy install weareinteractive.environment
-            cat ~/project/.circleci/ansible/inventory.txt
-            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+            cat inventory
+            ansible-playbook -i inventory deploy-server.yaml -vv
+      - destroy_environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail
+      - revert_migrations:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail
 
 workflows:
   default:
