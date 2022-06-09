@@ -1,43 +1,6 @@
 version: 2.1
-
+   
 jobs:
-  build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [frontend-deps]
-      - run:
-          name: Build front-end
-          command: |
-            cd frontend
-            npm install
-            npm run build
-            npm update
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-deps
-
-  build-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-deps]
-      - run:
-          name: Back-end build
-          command: |
-            cd backend
-            npm install
-            npm run build
-            npm update
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-deps
-
-
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -73,26 +36,6 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-
-
-    docker:
-      # Docker image here
-    steps:
-      # Checkout code from git
-      - run:
-          name: Get old stack workflow id
-          command: |
-            # your code here
-            export OldWorkflowID="the id here"
-            export STACKS=[] #put the list of stacks here
-      - run:
-          name: Remove old stacks and files
-          command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-            then
-              # your code here
-            fi
-            
 
 workflows:
   default:
