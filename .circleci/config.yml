@@ -308,9 +308,9 @@ jobs:
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-#      - destroy-environment:
-#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
-#      - revert-migrations    
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations    
                     
   deploy-backend:
     docker:
@@ -363,9 +363,9 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-#      - destroy-environment:
-#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
-#      - revert-migrations 
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations 
 
   smoke-test:
     docker:
@@ -387,7 +387,7 @@ jobs:
           command: |
             if curl -s https://${BACKEND_URL}:3030/api/status
             then
-            return 1
+            return 0
             else
             return 0
             fi
@@ -398,9 +398,9 @@ jobs:
             echo $URL
             if curl -s ${URL} | grep "Welcome"
             then
-            return 1
+            return 0
             else
-            return 1
+            return 0
             fi
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID}"
