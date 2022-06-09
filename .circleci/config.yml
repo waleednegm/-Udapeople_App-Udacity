@@ -43,7 +43,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-deps]
+          keys: [frontend-csh]
       - run:
           name: Front-end test
           command: |
@@ -57,18 +57,52 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-deps]
+          keys: [backend-csh]
       - run:
           name: Back-end test
           command: |
               cd backend
               npm install
               npm test
-          
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-csh]
+      - run:
+          name: Scan front-end
+          command: |
+            cd frontend
+            npm install
+            npm audit fix --force --audit-level=critical
+            npm audit --audit-level=critical
+
+  scan-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-csh]
+      - run:
+          name: Scan Back-end
+          command: |
+            cd backend
+            npm install
+            npm audit fix --force --audit-level=critical
+            npm audit --audit-level=critical
 workflows:
   default:
     jobs:
       - build-frontend
       - build-backend
       - test-frontend
+        requires: [build-frontend]
       - test-backend
+        requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
