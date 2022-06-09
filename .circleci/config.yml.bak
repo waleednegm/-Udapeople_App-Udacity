@@ -11,8 +11,10 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            # Your code here
-            exit 1
+            cd frontend
+            npm install
+            npm run build
+            npm update
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -35,6 +37,21 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-deps]
+      - run:
+          name: Back-end build
+          command: |
+              cd frontend
+              npm install
+              npm test
+      # Your job code here
+                
 workflows:
   default:
     jobs:
