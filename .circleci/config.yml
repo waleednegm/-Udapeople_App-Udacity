@@ -2,6 +2,7 @@ version: 2.1
    
 orbs: 
   slack: circleci/slack@4.10.1
+  aws-cli: circleci/aws-cli@1.3.0
   
 commands:
   destroy-environment:
@@ -315,10 +316,6 @@ jobs:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Add tStrictHostKeyChecking
-          command: |
-            echo -e "\nHost github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: 
           name: Install dependencies
           command: |
