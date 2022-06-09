@@ -50,7 +50,6 @@ jobs:
               cd frontend
               npm install
               npm test
-      # Your job code here
                 
 workflows:
   default:
