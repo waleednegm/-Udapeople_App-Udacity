@@ -324,6 +324,12 @@ jobs:
             apk add --update openssh-client tar gzip
             pip install awscli
       - run:
+          name: Install dependencies2
+          command: |
+            apk add --update ansible openssh-client tar gzip 
+      - restore_cache:
+          keys: ["backend-csh"]
+      - run:
           name: Build backend app
           command: |
             cd ~/project/backend

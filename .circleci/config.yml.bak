@@ -316,10 +316,6 @@ jobs:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Add tStrictHostKeyChecking
-          command: |
-            echo -e "\nHost github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: 
           name: Install dependencies
           command: |
@@ -327,6 +323,12 @@ jobs:
             apk add --update ansible zip
             apk add --update openssh-client tar gzip
             pip install awscli
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible openssh-client tar gzip 
+      - restore_cache:
+          keys: ["backend-csh"]
       - run:
           name: Build backend app
           command: |
