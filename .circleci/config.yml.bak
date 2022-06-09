@@ -21,9 +21,9 @@ commands:
           when: on_fail
           command: |
             echo "Destroying environment: <<parameters.workflow_id>> "
-            aws cloudformation delete-stack --stack-name udapeople-backend-prod-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-            aws cloudformation delete-stack --stack-name udapeople-frontend-prod-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     steps:
@@ -330,8 +330,12 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            cd /home
-            tar czf backend.tar.gz -P /home/circleci/project/backend/dist
+            cd ~/project/backend
+            ls
+            cd ../
+            cd backend/ && tar -zcvf ../backend.tar.gz . && cd - 
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv backend.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
       - run:
           name: Deploy backend 2
           command: |
@@ -409,8 +413,8 @@ jobs:
             if printf '%s\n' "${STACKS[@]}" | grep -q "$OLD_WORKFLOW_ID"; then
               echo "Removing previous stack"
               aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OLD_WORKFLOW_ID}"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OLD_WORKFLOW_ID}"
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}""
             fi
       
       - destroy-environment:
@@ -435,8 +439,8 @@ jobs:
               if [ "${OldWorkflowID}" != "<< pipeline.parameters.workflow-id >>" ]
               then
                 aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+                aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
               fi
 workflows:
   default:
