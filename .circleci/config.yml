@@ -275,8 +275,8 @@ jobs:
       - run:
           name: Install Ansible
           command: |
-            sudo apt update
-            sudo apt install software-properties-common
+            sudo apt update -y
+            sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
       - run: 
