@@ -1,9 +1,13 @@
 version: 2.1
    
 orbs: 
+  aws-cli: circleci/aws-cli@3.1.1
   slack: circleci/slack@4.10.1
-  aws-cli: circleci/aws-cli@1.3.0
   
+parameters:
+  workflow-id:
+    type: string
+    default: "${CIRCLE_WORKFLOW_ID}"
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -331,7 +335,7 @@ jobs:
             cd ../
             cd backend/ && tar -zcvf ../backend.tar.gz . && cd - 
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
-            mv backend.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
+            cp backend.tar.gz ~/project/.circleci/ansible/roles/deploy/files/
       - run:
           name: Deploy backend Setup EC2 instance & copy compiled backend to the EC2 instance
           command: |
