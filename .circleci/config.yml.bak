@@ -331,13 +331,6 @@ smoke-test:
             else
             return 0
             fi
-      - run:
-          name: Install AWS CLI for rollback
-          when: on_fail
-          command: |
-            apk add --update py3-pip && pip3 install --upgrade pip && pip3 install awscli
-      - revert-migrations
-      - destroy-environment 
 workflows:
   default:
     jobs:
