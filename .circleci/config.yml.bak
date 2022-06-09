@@ -342,6 +342,11 @@ jobs:
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible
       - run:
+          name: Install dependencies
+          command: |
+            cd backend
+            npm install
+      - run:
           name: Package Backend
           command: |
             cd backend

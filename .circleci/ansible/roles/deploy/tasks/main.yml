@@ -11,10 +11,13 @@
 
 - name: "Installing Node Dependencies"
   shell: |
+    sudo apt update -y
+    sudo apt install npm -y
     cd ~/backend-app
     npm i
 - name: "Executing Node app with PM2"
   shell: |
+    sudo npm i -g pm2
     cd ~/backend-app/dist
     pm2 stop default
     pm2 start main.js
