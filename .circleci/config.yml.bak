@@ -284,6 +284,7 @@ jobs:
           command: |
             curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt install -y nodejs
+            apk add --update ansible openssh-client tar gzip
       - add_ssh_keys:
           fingerprints: ["06:da:19:4a:cf:fd:a6:8e:d3:00:8f:ea:ab:fb:67:09"]
       - attach_workspace:
@@ -304,9 +305,7 @@ jobs:
       - run:
           name: Deploy backend-app
           command: |
-            export TYPEORM_MIGRATIONS_DIR=./migrations
-            export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-            export TYPEORM_MIGRATIONS=./migrations/*.ts
+            export ANSIBLE_HOST_KEY_CHECKING=False
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
