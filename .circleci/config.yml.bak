@@ -336,6 +336,7 @@ jobs:
           name: Deploy backend Setup EC2 instance & copy compiled backend to the EC2 instance
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
+            cd ../
             cd backend
             npm i
             npm run build
