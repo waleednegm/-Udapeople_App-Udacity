@@ -199,7 +199,7 @@ jobs:
             
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - run:
@@ -212,13 +212,10 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm update -g
-            npm audit fix
             npm install
             npm run migrations > migrations_dump.txt
-            npm audit fix
       - run:
-          name: Send migration status to kvdb.io OR memstash.io
+          name: Send migration status to kvdb.io
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
