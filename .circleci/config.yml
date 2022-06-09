@@ -263,7 +263,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - restore_cache:
@@ -280,13 +280,6 @@ jobs:
             apk add --update openssh-client tar gzip
             pip install awscli
       - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible
-      - run:
           name: Build backend app
           command: |
             cd ~/project/backend
@@ -300,7 +293,6 @@ jobs:
           command: |
             # ls ~/project/.circleci/ansible/roles/deploy/files/
             cd ~/project/backend
-            ansible-galaxy install weareinteractive.environment
             cat ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
 

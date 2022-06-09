@@ -263,7 +263,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - restore_cache:
@@ -279,18 +279,6 @@ jobs:
             apk add --update ansible zip
             apk add --update openssh-client tar gzip
             pip install awscli
-      - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible
-      - run:
-          name: Install Nodejs
-          command: |
-            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-            sudo apt install -y nodejs
       - run:
           name: Build backend app
           command: |
