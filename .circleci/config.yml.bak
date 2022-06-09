@@ -293,16 +293,16 @@ jobs:
           command: |
             cd backend
             npm install
+      - restore_cache:
+          keys: ["backend-csh"]
+          
       - run:
-          name: Package and Deploy backend
+          name: Package backend-app
           command: |
             cd backend
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            tar czf backend.tar.gz -P /home/circleci/project/backend/dist
       - run:
-          name: Deploy backend
+          name: Deploy backend-app
           command: |
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
