@@ -44,6 +44,23 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Build And Test FrontEnd*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
       - checkout
       - restore_cache:
           keys: [frontend-csh]
@@ -58,6 +75,23 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Build And Test Backend*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
       - checkout
       - restore_cache:
           keys: [backend-csh]
