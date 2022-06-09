@@ -22,7 +22,5 @@
   roles:
     - role: weareinteractive.environment
       become: true
-    # - role: configure-server
-    #   become: true
     - role: deploy
       become: true
