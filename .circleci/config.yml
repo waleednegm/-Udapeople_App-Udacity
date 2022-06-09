@@ -318,7 +318,7 @@ jobs:
       - run:
           name: Add tStrictHostKeyChecking
           command: |
-            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            echo -e "\nHost github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: 
           name: Install dependencies
           command: |
