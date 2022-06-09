@@ -11,7 +11,9 @@
     cd /home/ubuntu/
     tar xzvf backend.tar.gz
     # mv home/circleci/project/backend .
-    cd backend
+    #cd backend
+    sudo apt update
+    
     sudo npm install -g npm@latest
     sudo npm install -g webpack-dev-server
     sudo npm install
