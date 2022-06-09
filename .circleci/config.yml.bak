@@ -69,7 +69,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   test-frontend:
     docker:
       - image: cimg/node:13.8.0
@@ -100,7 +101,8 @@ jobs:
               cd frontend
               npm install
               npm test
-                
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}" 
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -131,6 +133,8 @@ jobs:
               cd backend
               npm install
               npm test
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   scan-frontend:
     docker:
       - image: cimg/node:13.8.0
@@ -144,6 +148,8 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical --force
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
 
   scan-backend:
     docker:
@@ -158,6 +164,8 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   deploy-infrastructure:
     docker:
       - image: cimg/base:stable
@@ -197,8 +205,10 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt     
-configure-infrastructure:
+            - project/.circleci/ansible/inventory.txt  
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"            
+  configure-infrastructure:
     docker:
       - image: cimg/base:stable
     steps:
@@ -226,6 +236,8 @@ configure-infrastructure:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   run-migrations:
     docker:
       - image: cimg/node:13.8.0
@@ -250,6 +262,9 @@ configure-infrastructure:
             then
               curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations
   deploy-frontend:
     docker:
       - image: cimg/base:stable
@@ -286,7 +301,9 @@ configure-infrastructure:
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      # Here's where you will add some code to rollback on failure      
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations    
                     
   deploy-backend:
     docker:
@@ -324,6 +341,9 @@ configure-infrastructure:
             cd ~/project/backend
             cat ~/project/.circleci/ansible/inventory.txt
             ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations
   smoke-test:
     docker:
       - image: python:3.7-alpine3.11
