@@ -20,10 +20,10 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-#            echo "Destroying environment: <<parameters.workflow_id>> "
-#            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-#            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-#            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+            echo "Destroying environment: <<parameters.workflow_id>> "
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     steps:
@@ -56,8 +56,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+#      - destroy-environment:
+#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   build-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -76,8 +76,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+#      - destroy-environment:
+#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   test-frontend:
     docker:
       - image: cimg/node:13.8.0
