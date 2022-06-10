@@ -56,8 +56,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-#      - destroy-environment:
-#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   build-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -76,8 +76,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-#      - destroy-environment:
-#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
   test-frontend:
     docker:
       - image: cimg/node:13.8.0
@@ -363,8 +363,8 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+#      - destroy-environment:
+#          workflow_id: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations 
 
   smoke-test:
@@ -486,7 +486,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update:
-          requires: [smoke-test]
+#      - cloudfront-update:
+#          requires: [smoke-test]
 #      - cleanup:
 #          requires: [cloudfront-update]
