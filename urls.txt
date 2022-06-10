@@ -9,7 +9,7 @@ URL03_SCREENSHOT
 d1wltym0au69ao.cloudfront.net
 
 URL04_SCREENSHOT
-http://52.87.152.145/api/status
+http://3.83.91.144/api/status
 
 URL05_SCREENSHOT
 http://ec2-54-157-61-98.compute-1.amazonaws.com:9090/targets
